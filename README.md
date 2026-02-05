@@ -2,16 +2,16 @@
 
 **An AI-Powered Immersive Investigative Simulator**
 
-> Built for the Gemini 3 Hackathon. Powered by Google's `gemini-2.0-flash-exp`.
+> Built for the Gemini 3 Hackathon. Powered by Google's `gemini-3.0-flash`.
 
 ## Overview
-Detective Academy is a next-generation role-playing platform where users train as budding detectives under an intelligent AI Game Master. Unlike static logic puzzles or linear visual novels, Detective Academy uses **Gemini 2.0's multimodal reasoning** to generate unique cases, analyze visual evidence uploaded by the user, and evaluate complex hypotheses in real-time.
+Detective Academy is a next-generation role-playing platform where users train as budding detectives under an intelligent AI Game Master. Unlike static logic puzzles or linear visual novels, Detective Academy uses **Gemini 3's multimodal reasoning** to generate unique cases, analyze visual evidence uploaded by the user, and evaluate complex hypotheses in real-time.
 
 ## How Gemini 3 is Used
 This application relies entirely on the Gemini API for its core loop. It is not a wrapper around a database of pre-written cases; the "Game Master" is live AI.
 
-*   **Case Generation**: We use `gemini-2.0-flash-exp` to construct causally consistent mystery scenarios, complete with scene descriptions, physical clues, and suspect alibis, generated on-the-fly based on player rank.
-*   **Multimodal Evidence Analysis**: Users can upload images of "crime scenes" (or any photo). The Vision capabilities of Gemini 2.0 analyze these images to find hidden clues and anomalies relevant to the current case context.
+*   **Case Generation**: We use `gemini-3.0-flash` to construct causally consistent mystery scenarios, complete with scene descriptions, physical clues, and suspect alibis, generated on-the-fly based on player rank.
+*   **Multimodal Evidence Analysis**: Users can upload images of "crime scenes" (or any photo). The Vision capabilities of Gemini 3 analyze these images to find hidden clues and anomalies relevant to the current case context.
 *   **Logical Evaluation**: The engine does not just match keywords. It performs a chain-of-thought evaluation of the user's free-text hypothesis against the ground-truth vector of the generated case, providing coaching feedback and a transparent reasoning trace.
 
 ## Features

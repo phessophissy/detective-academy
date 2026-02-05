@@ -11,12 +11,12 @@ const genAI = new GoogleGenerativeAI(apiKey || "");
 
 // Use a model that supports JSON mode and multimodality
 export const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash-exp",
+    model: "gemini-3.0-flash",
     generationConfig: {
         responseMimeType: "application/json"
     }
 });
 
 export const visionModel = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash-exp"
+    model: "gemini-3.0-flash"
 });
