@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { PlayerState, Case, Hypothesis, EngineResponse } from '@/lib/types';
-import { MockEngine } from '@/lib/mock-engine';
+// import { MockEngine } from '@/lib/mock-engine'; // Disabled for Real API
 
 interface GameContextType {
     playerState: PlayerState;
@@ -45,14 +45,29 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('detective-academy-state', JSON.stringify(playerState));
     }, [playerState]);
 
+    /* 
+    Updated to use Real Gemini API Routes 
+  */
+
     const startNewCase = async () => {
         setIsLoading(true);
         try {
-            const newCase = await MockEngine.generateCase(playerState.rank);
+            // Call the live API route
+            const res = await fetch('/api/generate-case', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rank: playerState.rank })
+            });
+
+            if (!res.ok) throw new Error("API call failed");
+
+            const newCase: Case = await res.json();
+
             setCurrentCase(newCase);
             setPlayerState(prev => ({ ...prev, currentCaseId: newCase.id }));
         } catch (error) {
             console.error("Failed to generate case", error);
+            alert("Failed to contact Gemini API. Please check your API Key configuration.");
         } finally {
             setIsLoading(false);
         }
@@ -63,7 +78,21 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(true);
 
         try {
-            const response = await MockEngine.evaluateHypothesis(hypothesis, currentCase);
+            const res = await fetch('/api/evaluate-hypothesis', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    hypothesis,
+                    caseContext: {
+                        correctHypothesisVector: currentCase.correctHypothesisVector,
+                        suspects: currentCase.suspects
+                    }
+                })
+            });
+
+            if (!res.ok) throw new Error("API call failed");
+
+            const response: EngineResponse = await res.json();
 
             // Update player state based on result
             if (response.isCorrect) {
@@ -83,6 +112,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             }
 
             return response;
+        } catch (error) {
+            console.error("Evaluation error", error);
+            throw error;
         } finally {
             setIsLoading(false);
         }
@@ -91,7 +123,31 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     const analyzeImage = async (file: File) => {
         setIsLoading(true);
         try {
-            return await MockEngine.analyzeImage(file);
+            // Convert file to Base64
+            const reader = new FileReader();
+            return new Promise<{ description: string; hiddenClues: string[] }>((resolve, reject) => {
+                reader.onload = async () => {
+                    try {
+                        const base64String = reader.result as string;
+
+                        const res = await fetch('/api/analyze-evidence', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                imageBase64: base64String,
+                                caseContext: currentCase ? currentCase.description : ""
+                            })
+                        });
+
+                        if (!res.ok) throw new Error("Analysis failed");
+                        const data = await res.json();
+                        resolve(data);
+                    } catch (e) {
+                        reject(e);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
         } finally {
             setIsLoading(false);
         }
