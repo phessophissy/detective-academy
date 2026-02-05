@@ -1,0 +1,127 @@
+.dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-8);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-8);
+    padding: var(--space-4);
+    background: var(--bg-card);
+    border: 1px solid var(--fg-muted);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+}
+
+.badge {
+    display: flex;
+    flex-direction: column;
+}
+
+.badgeLabel {
+    font-size: 0.8rem;
+    color: var(--fg-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.badgeValue {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--accent-gold);
+}
+
+.stats {
+    display: flex;
+    gap: var(--space-8);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.statValue {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.statLabel {
+    font-size: 0.8rem;
+    color: var(--fg-secondary);
+}
+
+.main {
+    text-align: center;
+    padding-top: var(--space-8);
+}
+
+.title {
+    font-size: 3rem;
+    margin-bottom: var(--space-2);
+    background: linear-gradient(to right, var(--fg-primary), var(--fg-secondary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: var(--fg-secondary);
+    margin-bottom: var(--space-8);
+}
+
+.startButton {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: var(--space-4) var(--space-8);
+    font-size: 1.2rem;
+    font-family: var(--font-display);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 20px var(--accent-blue-dim);
+}
+
+.startButton:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px var(--accent-blue);
+}
+
+.startButton:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+.history {
+    margin-top: var(--space-8);
+    text-align: left;
+}
+
+.history h2 {
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--fg-muted);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+.historyList {
+    list-style: none;
+}
+
+.historyItem {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-4);
+    background: var(--bg-panel);
+    margin-bottom: var(--space-2);
+    border-radius: var(--radius-sm);
+    color: var(--fg-secondary);
+}
