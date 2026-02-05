@@ -1,61 +1,21 @@
-# Detective Academy
+## 🧠 About This Project
 
-**An AI-Powered Immersive Investigative Simulator**
+**Detective Academy** was built for the **Gemini 3 Hackathon** hosted on Devpost.
 
-> Built for the Gemini 3 Hackathon. Powered by Google's `gemini-3.0-flash`.
+This application integrates directly with the **Google Gemini 3 API**. It uses the Gemini 3 Flash or Gemini 3 Pro model (based on availability and performance) for:
 
-## Overview
-Detective Academy is a next-generation role-playing platform where users train as budding detectives under an intelligent AI Game Master. Unlike static logic puzzles or linear visual novels, Detective Academy uses **Gemini 3's multimodal reasoning** to generate unique cases, analyze visual evidence uploaded by the user, and evaluate complex hypotheses in real-time.
+- generating and evaluating investigative logic
+- multimodal reasoning with user-provided evidence
+- structured AI responses that power game progression
 
-## How Gemini 3 is Used
-This application relies entirely on the Gemini API for its core loop. It is not a wrapper around a database of pre-written cases; the "Game Master" is live AI.
+We chose the Gemini 3 model family to ensure the highest reasoning capacity and largest supported context window, which are critical for complex deduced storytelling flows.
 
-*   **Case Generation**: We use `gemini-3.0-flash` to construct causally consistent mystery scenarios, complete with scene descriptions, physical clues, and suspect alibis, generated on-the-fly based on player rank.
-*   **Multimodal Evidence Analysis**: Users can upload images of "crime scenes" (or any photo). The Vision capabilities of Gemini 3 analyze these images to find hidden clues and anomalies relevant to the current case context.
-*   **Logical Evaluation**: The engine does not just match keywords. It performs a chain-of-thought evaluation of the user's free-text hypothesis against the ground-truth vector of the generated case, providing coaching feedback and a transparent reasoning trace.
+### Gemini 3 Usage
 
-## Features
-*   🧬 **Live Case Generation**: Infinite replayability with varying difficulty.
-*   👁️ **Vision Analysis**: Upload evidence photos for AI forensic scanning.
-*   🧠 **Reasoning Engine**: Get graded on logic, not just guessing the right name.
-*   🕵️ **Progression System**: Earn ranks from Cadet to Senior Detective.
+In our backend API routes (e.g., `/api/analyzeEvidence` and `/api/evaluateHypothesis`), we call the latest **Gemini 3 model** via the official Gemini API. These calls use structured outputs and reasoning configurations to orchestrate multi-step inferences and maintain session state in real time.
 
-## Getting Started
+You can inspect the code under `/api/` to see how we handle Gemini 3 integrations and how the AI guides game logic.
 
-### Prerequisites
-*   Node.js 18+
-*   A Google Gemini API Key
+This project complies with all hackathon requirements, including public demo, public code repo, and a demo video showing the project functioning live on Vercel.
 
-### Installation
-
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/phessophissy/detective-academy.git
-    cd detective-academy
-    ```
-
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
-
-3.  **Configure Environment**
-    Create a `.env.local` file in the root directory:
-    ```bash
-    GEMINI_API_KEY=your_api_key_here
-    ```
-
-4.  **Run Development Server**
-    ```bash
-    npm run dev
-    ```
-    Open [http://localhost:3000](http://localhost:3000).
-
-## Tech Stack
-*   **Framework**: Next.js 15 (App Router)
-*   **AI**: Google Generative AI SDK (`@google/generative-ai`)
-*   **Styling**: Vanilla CSS (CSS Modules)
-*   **Deployment**: Vercel
-
-## Demo
-[Live Demo URL](https://detective-academy.vercel.app/)
+Built by: *Phessophissy*
