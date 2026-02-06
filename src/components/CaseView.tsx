@@ -27,14 +27,20 @@ export default function CaseView({ caseData }: CaseViewProps) {
                 <div className={styles.visualsColumn}>
                     <div className={styles.sceneViewer}>
                         <div className={styles.imageContainer}>
-                            {/* Visual placeholder or real image if available */}
-                            <Image
-                                src={activeScene.imageUrl}
-                                alt={activeScene.title}
-                                width={800}
-                                height={600}
-                                className={styles.sceneImage}
-                            />
+                            {activeScene.svgImage ? (
+                                <div
+                                    className={styles.sceneSvg}
+                                    dangerouslySetInnerHTML={{ __html: activeScene.svgImage }}
+                                />
+                            ) : (
+                                <Image
+                                    src={activeScene.imageUrl}
+                                    alt={activeScene.title}
+                                    width={800}
+                                    height={600}
+                                    className={styles.sceneImage}
+                                />
+                            )}
                             <div className={styles.sceneOverlay}>
                                 <h3>{activeScene.title}</h3>
                             </div>

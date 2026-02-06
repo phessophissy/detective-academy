@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
             "title": "Scene Name",
             "description": "Visual description...",
             "imageUrl": "https://placehold.co/800x600?text=Scene+Visual", 
+            "svgImage": "<svg viewBox='0 0 500 300' xmlns='http://www.w3.org/2000/svg'>...</svg> (A simple, atmospheric SVG illustration of the scene using dark colors)",
             "clues": [
                { "id": "c1", "description": "...", "type": "physical|testimony|digital", "isHidden": boolean }
             ]

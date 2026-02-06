@@ -28,7 +28,8 @@ export interface Scene {
     id: string;
     title: string;
     description: string;
-    imageUrl: string; // Placeholder or generated
+    imageUrl: string;
+    svgImage?: string; // Generated SVG content
     clues: Clue[];
 }
 
