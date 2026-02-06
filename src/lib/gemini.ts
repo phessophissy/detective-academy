@@ -17,10 +17,14 @@ export const model = genAI.getGenerativeModel({
     }
 });
 
+export const visionModel = genAI.getGenerativeModel({
+    model: "gemini-3-flash-preview"
+});
+
 // Helper to handle rate limits with exponential backoff
 export async function generateWithRetry(
     modelInstance: any,
-    prompt: string,
+    prompt: string | Array<any>,
     retries = 3,
     baseDelay = 2000
 ): Promise<any> {
