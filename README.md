@@ -10,6 +10,11 @@ This application integrates directly with the **Google Gemini 3 API**. It uses t
 
 We chose the Gemini 3 model family to ensure the highest reasoning capacity and largest supported context window, which are critical for complex deduced storytelling flows.
 
+### 📘 Player Guide
+**New to the Academy?** Check out the [Detective Academy Field Manual](GAME_GUIDE.md) for a complete guide on how to play, analyze evidence, and rank up.
+
+## Getting Started
+
 ### Gemini 3 Usage
 
 In our backend API routes (e.g., `/api/analyzeEvidence` and `/api/evaluateHypothesis`), we call the latest **Gemini 3 model** via the official Gemini API. These calls use structured outputs and reasoning configurations to orchestrate multi-step inferences and maintain session state in real time.
