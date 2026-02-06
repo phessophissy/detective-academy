@@ -1,4 +1,4 @@
-import { model } from "@/lib/gemini";
+import { model, generateWithRetry } from "@/lib/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       }
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await generateWithRetry(model, prompt);
     const response = await result.response;
     const text = response.text();
     const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();

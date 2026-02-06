@@ -1,4 +1,4 @@
-import { visionModel } from "@/lib/gemini";
+import { visionModel, generateWithRetry } from "@/lib/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         // Remove data URL prefix if present for the API call
         const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
 
-        const result = await visionModel.generateContent([
+        const result = await generateWithRetry(visionModel, [
             prompt,
             {
                 inlineData: {
