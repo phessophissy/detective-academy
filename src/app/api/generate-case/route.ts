@@ -2,10 +2,10 @@ import { model } from "@/lib/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    try {
-        const { rank } = await req.json();
+  try {
+    const { rank } = await req.json();
 
-        const prompt = `
+    const prompt = `
       Generate a unique detective mystery case for a player of rank: ${rank}.
       
       Structure the response EXACTLY according to this JSON schema:
@@ -34,15 +34,19 @@ export async function POST(req: NextRequest) {
       Make the mystery logical but challenging. Ensure the "correctHypothesisVector" is detailed enough to validate user theories.
     `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-        const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
 
-        return NextResponse.json(JSON.parse(jsonStr));
+    return NextResponse.json(JSON.parse(jsonStr));
 
-    } catch (error) {
-        console.error("Case generation failed:", error);
-        return NextResponse.json({ error: "Failed to generate case" }, { status: 500 });
-    }
+  } catch (error: any) {
+    console.error("Case generation failed:", error);
+    return NextResponse.json({
+      error: "Failed to generate case",
+      details: error.message || String(error)
+    }, { status: 500 });
+  }
 }
+```

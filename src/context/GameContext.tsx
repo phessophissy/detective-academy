@@ -59,15 +59,18 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
                 body: JSON.stringify({ rank: playerState.rank })
             });
 
-            if (!res.ok) throw new Error("API call failed");
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.details || "API call failed");
+            }
 
             const newCase: Case = await res.json();
 
             setCurrentCase(newCase);
             setPlayerState(prev => ({ ...prev, currentCaseId: newCase.id }));
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to generate case", error);
-            alert("Failed to contact Gemini API. Please check your API Key configuration.");
+            alert(`Error: ${error.message || "Failed to contact Gemini API"}`);
         } finally {
             setIsLoading(false);
         }

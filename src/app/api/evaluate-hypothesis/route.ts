@@ -2,10 +2,10 @@ import { model } from "@/lib/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    try {
-        const { hypothesis, caseContext } = await req.json();
+  try {
+    const { hypothesis, caseContext } = await req.json();
 
-        const prompt = `
+    const prompt = `
       You are the Academy Engine. Evaluate a student detective's hypothesis.
       
       Case Truth: ${caseContext.correctHypothesisVector}
@@ -28,15 +28,19 @@ export async function POST(req: NextRequest) {
       }
     `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-        const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
 
-        return NextResponse.json(JSON.parse(jsonStr));
+    return NextResponse.json(JSON.parse(jsonStr));
 
-    } catch (error) {
-        console.error("Evaluation failed:", error);
-        return NextResponse.json({ error: "Failed to evaluate hypothesis" }, { status: 500 });
-    }
+  } catch (error: any) {
+    console.error("Evaluation failed:", error);
+    return NextResponse.json({
+      error: "Failed to evaluate hypothesis",
+      details: error.message || String(error)
+    }, { status: 500 });
+  }
 }
+```
