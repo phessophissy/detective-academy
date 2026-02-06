@@ -1,4 +1,8 @@
-import { model } from "@/lib/gemini";
+import { model, generateWithRetry } from "@/lib/gemini";
+
+// ... inside POST ...
+
+const result = await generateWithRetry(model, prompt);
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -35,7 +39,7 @@ export async function POST(req: NextRequest) {
       Make the mystery logical but challenging. Ensure the "correctHypothesisVector" is detailed enough to validate user theories.
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await generateWithRetry(model, prompt);
     const response = await result.response;
     const text = response.text();
     const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();

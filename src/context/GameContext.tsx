@@ -70,7 +70,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             setPlayerState(prev => ({ ...prev, currentCaseId: newCase.id }));
         } catch (error: any) {
             console.error("Failed to generate case", error);
-            alert(`Error: ${error.message || "Failed to contact Gemini API"}`);
+            const msg = error.message || "Failed to contact Gemini API";
+            if (msg.includes("429") || msg.includes("Too Many Requests")) {
+                alert("⚠️ The AI Detective is busy (Rate Limit Reached). Please wait 30 seconds and try again.");
+            } else {
+                alert(`Error: ${msg}`);
+            }
         } finally {
             setIsLoading(false);
         }
