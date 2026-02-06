@@ -1,8 +1,4 @@
 import { model, generateWithRetry } from "@/lib/gemini";
-
-// ... inside POST ...
-
-const result = await generateWithRetry(model, prompt);
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
