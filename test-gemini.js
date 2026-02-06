@@ -1,6 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const apiKey = "AIzaSyCR-ApDBvTrxCBQaoFOuBOcC9SQTtspzmw";
+const apiKey = process.env.GEMINI_API_KEY || "AIzaSyAKI7-Ekw3PYxl_HKKvauZu4QNLbB_p4Uk";
 
 async function testModel(modelName) {
     console.log(`Testing model: ${modelName}`);
