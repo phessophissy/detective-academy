@@ -1,6 +1,6 @@
 ## 🧠 Detective Academy: Powered by Gemini 3
 
-**Winner/Finalist Quality Submission for the Google Gemini 3 Hackathon**
+
 
 Detective Academy transforms the standard "chat with AI" paradigm into a **reasoning-first detective game**. By leveraging **Gemini 3 Flash & Pro**, we generate infinite, logically consistent murder mysteries, analyze evidence multi-modally, and evaluate player deductions with probabilistic precision.
 
