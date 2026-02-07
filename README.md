@@ -6,7 +6,17 @@ Detective Academy transforms the standard "chat with AI" paradigm into a **reaso
 
 *(Note: All core reasoning logic is handled dynamically by Gemini 3. Nothing is hardcoded.)*
 
-## 🏗️ Architecture
+## 🏗️ Architecture: A Robust Reasoning Orchestrator
+
+**Detective Academy is not a prompt wrapper.** It is a stateful application that orchestrates multiple specialized Gemini 3 calls to build a cohesive gameplay experience.
+
+**Why this fits the "Action Era":**
+1.  **Stateful Persistence**: A single prompt cannot solve this. The game maintains complex state (evidence found, player rank, case history) that persists across multiple AI interactions.
+2.  **Multi-Step Agents**:
+    *   **Generator Agent**: Creates the world, logic, and truth vector.
+    *   **Vision Agent**: Analyzes *new* user-injected evidence in the context of the specific case.
+    *   **Evaluator Agent**: Blindly compares user deductions against the hidden truth vector using probabilistic logic.
+    *   **Visualizer Agent**: Reconstructs the scene visually based on evolving data.
 
 ```ascii
 [User Interface]  <-- React/Next.js -->  [API Routes]
