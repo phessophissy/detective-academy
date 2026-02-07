@@ -76,20 +76,17 @@ export default function InvestigationPanel() {
                             </ul>
                         </div>
                     )}
+                    )}
                 </div>
-                </div>
-    )
-}
+            )}
 
-{
-    lastResponse && !lastResponse.isCorrect && (
-        <div className={styles.actions}>
-            <button onClick={quitCase} className={styles.quitBtn}>
-                Return to Headquarters (Give Up)
-            </button>
+            {lastResponse && !lastResponse.isCorrect && (
+                <div className={styles.actions}>
+                    <button onClick={quitCase} className={styles.quitBtn}>
+                        Return to Headquarters (Give Up)
+                    </button>
+                </div>
+            )}
         </div>
-    )
-}
-        </div >
     );
 }
