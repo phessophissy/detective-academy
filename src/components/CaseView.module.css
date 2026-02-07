@@ -206,3 +206,101 @@
     background: var(--accent-danger);
     color: var(--fg-primary);
 }
+
+/* Image Generation Styles */
+.geminiImageBadge {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--fg-primary);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border: 1px solid var(--accent-blue);
+    z-index: 10;
+}
+
+.loadingOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    color: var(--accent-blue);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--accent-blue);
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: var(--space-2);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.sceneControls {
+    background: var(--bg-panel);
+    padding: var(--space-2);
+    display: flex;
+    gap: var(--space-2);
+    border-top: 1px solid var(--fg-muted);
+}
+
+.regenBtn {
+    flex: 1;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+}
+
+.regenBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.promptBtn {
+    background: transparent;
+    border: 1px solid var(--fg-muted);
+    color: var(--fg-secondary);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.7rem;
+}
+
+.promptBox {
+    background: #000;
+    padding: var(--space-2);
+    font-size: 0.7rem;
+    max-height: 100px;
+    overflow-y: auto;
+    border-top: 1px solid var(--fg-muted);
+}
+
+.promptBox pre {
+    white-space: pre-wrap;
+    color: var(--fg-secondary);
+    margin-top: var(--space-1);
+}

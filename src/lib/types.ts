@@ -30,6 +30,8 @@ export interface Scene {
     description: string;
     imageUrl: string;
     svgImage?: string; // Generated SVG content
+    generatedImage?: string; // Base64 Gemini 3 Image
+    imagePrompt?: string; // For transparency
     clues: Clue[];
 }
 
