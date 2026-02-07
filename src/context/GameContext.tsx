@@ -12,6 +12,7 @@ interface GameContextType {
     submitHypothesis: (hypothesis: Hypothesis) => Promise<EngineResponse>;
     analyzeImage: (file: File) => Promise<{ description: string; hiddenClues: string[] }>;
     quitCase: () => void;
+    askForGuidance: () => Promise<{ hint: string; focusArea: string }>;
 }
 
 const INITIAL_STATE: PlayerState = {
@@ -166,6 +167,26 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         setCurrentCase(null);
     };
 
+    const askForGuidance = async () => {
+        if (!currentCase) throw new Error("No active case");
+        setIsLoading(true);
+        try {
+            const res = await fetch('/api/get-guidance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    caseContext: currentCase.description,
+                    currentEvidence: playerState.history // overly simple, but functional for hackathon context
+                })
+            });
+
+            if (!res.ok) throw new Error("Guidance failed");
+            return await res.json();
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <GameContext.Provider value={{
             playerState,
@@ -174,7 +195,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             startNewCase,
             submitHypothesis,
             analyzeImage,
-            quitCase
+            quitCase,
+            askForGuidance
         }}>
             {children}
         </GameContext.Provider>

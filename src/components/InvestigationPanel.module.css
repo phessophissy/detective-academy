@@ -124,6 +124,177 @@
     margin-bottom: var(--space-4);
 }
 
+/* Hackathon Styles */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--fg-muted);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-2);
+}
+
+.geminiBadge {
+    background: linear-gradient(135deg, #1e40af, #7c3aed);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.3);
+}
+
+.guidanceBtn {
+    width: 100%;
+    margin-top: var(--space-1);
+    background: var(--accent-gold);
+    color: var(--bg-core);
+    border: none;
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.guidanceBtn:hover:not(:disabled) {
+    background: #fbbf24;
+}
+
+.guidanceBtn:disabled {
+    opacity: 0.6;
+}
+
+.guidanceBox {
+    background: linear-gradient(to right, #1e3a8a20, #0000);
+    border-left: 3px solid var(--accent-gold);
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.guidanceBox h4 {
+    margin: 0 0 var(--space-2) 0;
+    color: var(--accent-gold);
+    font-size: 0.9rem;
+}
+
+.feedbackHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.modelTag {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: var(--fg-muted);
+    background: #00000040;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.probTable {
+    margin: var(--space-4) 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+}
+
+.probTable table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.probTable th {
+    text-align: left;
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    padding-bottom: var(--space-2);
+}
+
+.probTable td {
+    padding: 4px 0;
+    font-size: 0.9rem;
+}
+
+.probBar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.probFill {
+    height: 6px;
+    background: var(--accent-blue);
+    border-radius: 3px;
+}
+
+.summaryBox {
+    margin-bottom: var(--space-4);
+}
+
+.summaryBox h4 {
+    font-size: 0.9rem;
+    color: var(--fg-primary);
+    margin-bottom: var(--space-2);
+}
+
+.summaryBox ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.summaryBox li {
+    margin-bottom: 4px;
+    padding-left: 12px;
+    position: relative;
+    font-size: 0.9rem;
+}
+
+.summaryBox li::before {
+    content: "•";
+    color: var(--accent-blue);
+    position: absolute;
+    left: 0;
+}
+
+.devMode {
+    margin-top: var(--space-4);
+    border-top: 1px dashed var(--fg-muted);
+    padding-top: var(--space-2);
+}
+
+.devToggle {
+    background: none;
+    border: none;
+    color: var(--fg-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.devToggle:hover {
+    color: var(--fg-secondary);
+}
+
+.rawJson {
+    margin-top: var(--space-2);
+    background: #000;
+    padding: var(--space-2);
+    font-size: 0.7rem;
+    overflow-x: auto;
+    color: #0f0;
+    border-radius: var(--radius-sm);
+    max-height: 200px;
+}
+
+/* Updated Trace Style */
 .trace {
     font-size: 0.85rem;
     background: rgba(0, 0, 0, 0.3);

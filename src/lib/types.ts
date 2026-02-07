@@ -64,7 +64,18 @@ export interface Hypothesis {
 export interface EngineResponse {
     score: number;
     feedback: string;
-    reasoningTrace: string[]; // For transparency mode
+    reasoningTrace: string[]; // Step-by-step logic
     nextHint?: string;
     isCorrect: boolean;
+    // Gemini 3 Hackathon Extensions
+    modelName?: string; // e.g. "gemini-3-flash-preview"
+    suspectProbabilities?: Record<string, number>; // Suspect Name -> 0-100%
+    reasoningSummary?: string[]; // Bullet points for UI summary
+    rawResponse?: any; // For Dev Mode transparency
+}
+
+export interface GuidanceResponse {
+    hint: string;
+    focusArea: string; // e.g., "Check the Vault"
+    modelName: string;
 }

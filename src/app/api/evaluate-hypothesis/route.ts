@@ -24,6 +24,14 @@ export async function POST(req: NextRequest) {
            "Step 1: Analyzed student claim X against fact Y...",
            "Step 2: Checked suspect alibi consistency..."
         ],
+        "suspectProbabilities": {
+           "Suspect Name 1": 10,
+           "Suspect Name 2": 85
+        },
+        "reasoningSummary": [
+           "Evidence A contradicts Suspect B's alibi",
+           "Means of entry matches Suspect C's skills"
+        ],
         "nextHint": "A subtle hint if they are wrong, or a congratulatory note if right."
       }
     `;
@@ -32,8 +40,13 @@ export async function POST(req: NextRequest) {
     const response = await result.response;
     const text = response.text();
     const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
+    const parsedData = JSON.parse(jsonStr);
 
-    return NextResponse.json(JSON.parse(jsonStr));
+    return NextResponse.json({
+      ...parsedData,
+      modelName: "gemini-3-flash-preview", // Explicitly stating model for Hackathon compliance
+      rawResponse: parsedData // For Dev Mode
+    });
 
   } catch (error: any) {
     console.error("Evaluation failed:", error);
