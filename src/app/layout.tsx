@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { GameProvider } from "@/context/GameContext";
+import Footer from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -28,7 +29,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${outfit.variable}`}>
         <GameProvider>
-          {children}
+          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            {children}
+            <Footer />
+          </div>
         </GameProvider>
       </body>
     </html>

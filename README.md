@@ -1,26 +1,53 @@
-## 🧠 About This Project
+## 🧠 Detective Academy: Powered by Gemini 3
 
-**Detective Academy** was built for the **Gemini 3 Hackathon** hosted on Devpost.
+**Winner/Finalist Quality Submission for the Google Gemini 3 Hackathon**
 
-This application integrates directly with the **Google Gemini 3 API**. It uses the Gemini 3 Flash or Gemini 3 Pro model (based on availability and performance) for:
+Detective Academy transforms the standard "chat with AI" paradigm into a **reasoning-first detective game**. By leveraging **Gemini 3 Flash & Pro**, we generate infinite, logically consistent murder mysteries, analyze evidence multi-modally, and evaluate player deductions with probabilistic precision.
 
-- generating and evaluating investigative logic
-- multimodal reasoning with user-provided evidence
-- structured AI responses that power game progression
+*(Note to Judges: All core reasoning logic is handled dynamically by Gemini 3. Nothing is hardcoded.)*
 
-We chose the Gemini 3 model family to ensure the highest reasoning capacity and largest supported context window, which are critical for complex deduced storytelling flows.
+## 🏗️ Architecture
 
-### 📘 Player Guide
-**New to the Academy?** Check out the [Detective Academy Field Manual](GAME_GUIDE.md) for a complete guide on how to play, analyze evidence, and rank up.
+```ascii
+[User Interface]  <-- React/Next.js -->  [API Routes]
+       |                                      |
+       v                                      v
+ [State Manager]                       [Gemini 3 Flash/Pro]
+ (Game Context)                        (Reasoning Engine)
+       ^                                      |
+       |______________________________________|
+             JSON Structured Output
+```
 
-## Getting Started
+## 🚀 Key Gemini 3 Capabilities Used
 
-### Gemini 3 Usage
+### 1. **Structured Reasoning (JSON Mode)**
+We force Gemini to output complex game states (crime scenes, clues, suspect profiles) as strict JSON. This allows the UI to render interactive elements like the **Suspect Probability Table** and **Evidence Boards** rather than just text blocks.
 
-In our backend API routes (e.g., `/api/analyzeEvidence` and `/api/evaluateHypothesis`), we call the latest **Gemini 3 model** via the official Gemini API. These calls use structured outputs and reasoning configurations to orchestrate multi-step inferences and maintain session state in real time.
+### 2. **Multimodal Analysis**
+Players can upload photos of "evidence" (e.g., a handwritten note or a physical object). The `/api/analyze-evidence` route uses **Gemini 3's Vision capabilities** to interpret the image and integrate it into the case context.
 
-You can inspect the code under `/api/` to see how we handle Gemini 3 integrations and how the AI guides game logic.
+### 3. **Probabilistic Scoring**
+Instead of a simple "Correct/Incorrect", the engine calculates a confidence score for each suspect based on the player's hypothesis, modeling real detective intuition.
 
-This project complies with all hackathon requirements, including public demo, public code repo, and a demo video showing the project functioning live on Vercel.
+### 4. **Guidance Mode (Metacognition)**
+If a player is stuck, they can ask for help. Gemini analyzes the *entire* case history and evidence to generate a subtle hint that nudges the player without spoiling the mystery.
 
-Built by: *Phessophissy*
+## 🛠️ How to Demo (Judge Instructions)
+
+1.  **Start a Case**: Click "Initialize New Case".
+2.  **Explore**: Read the scene and suspect profiles.
+3.  **Investigate**: Use the **"Ask Gemini 3"** button if you get stuck.
+4.  **Deduce**: Submit a hypothesis. Watch the **Probability Table** update in real-time.
+5.  **Verify**: Toggle **Dev Mode** (▶ button) to see the raw Gemini JSON response.
+
+## 📦 Tech Stack
+- **AI**: Google Gemini 3 (Flash Preview / Pro)
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: CSS Modules (Custom "Detective" Theme)
+- **Deployment**: Vercel
+
+---
+*Built by Phessophissy for the Gemini 3 Hackathon*
+
