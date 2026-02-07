@@ -6,7 +6,7 @@ import styles from "./InvestigationPanel.module.css";
 import { EngineResponse } from "@/lib/types";
 
 export default function InvestigationPanel() {
-    const { submitHypothesis, analyzeImage, isLoading } = useGame();
+    const { submitHypothesis, analyzeImage, quitCase, isLoading } = useGame();
     const [hypothesis, setHypothesis] = useState("");
     const [lastResponse, setLastResponse] = useState<EngineResponse | null>(null);
 
@@ -77,7 +77,19 @@ export default function InvestigationPanel() {
                         </div>
                     )}
                 </div>
-            )}
+                </div>
+    )
+}
+
+{
+    lastResponse && !lastResponse.isCorrect && (
+        <div className={styles.actions}>
+            <button onClick={quitCase} className={styles.quitBtn}>
+                Return to Headquarters (Give Up)
+            </button>
         </div>
+    )
+}
+        </div >
     );
 }

@@ -184,3 +184,25 @@
     margin-bottom: var(--space-1);
     color: var(--accent-danger);
 }
+
+.actions {
+    margin-top: var(--space-4);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.quitBtn {
+    background: transparent;
+    border: 1px solid var(--accent-danger);
+    color: var(--accent-danger);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: var(--font-display);
+    transition: all 0.2s;
+}
+
+.quitBtn:hover {
+    background: var(--accent-danger);
+    color: var(--fg-primary);
+}

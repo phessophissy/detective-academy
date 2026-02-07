@@ -11,6 +11,7 @@ interface GameContextType {
     startNewCase: () => Promise<void>;
     submitHypothesis: (hypothesis: Hypothesis) => Promise<EngineResponse>;
     analyzeImage: (file: File) => Promise<{ description: string; hiddenClues: string[] }>;
+    quitCase: () => void;
 }
 
 const INITIAL_STATE: PlayerState = {
@@ -161,6 +162,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const quitCase = () => {
+        setCurrentCase(null);
+    };
+
     return (
         <GameContext.Provider value={{
             playerState,
@@ -168,7 +173,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             isLoading,
             startNewCase,
             submitHypothesis,
-            analyzeImage
+            analyzeImage,
+            quitCase
         }}>
             {children}
         </GameContext.Provider>
