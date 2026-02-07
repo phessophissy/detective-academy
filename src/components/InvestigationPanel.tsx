@@ -76,7 +76,6 @@ export default function InvestigationPanel() {
                             </ul>
                         </div>
                     )}
-                    )}
                 </div>
             )}
 
