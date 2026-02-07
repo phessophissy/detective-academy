@@ -24,8 +24,9 @@ Detective Academy transforms the standard "chat with AI" paradigm into a **reaso
 ### 1. **Structured Reasoning (JSON Mode)**
 We force Gemini to output complex game states (crime scenes, clues, suspect profiles) as strict JSON. This allows the UI to render interactive elements like the **Suspect Probability Table** and **Evidence Boards** rather than just text blocks.
 
-### 2. **Multimodal Analysis**
-Players can upload photos of "evidence" (e.g., a handwritten note or a physical object). The `/api/analyze-evidence` route uses **Gemini 3's Vision capabilities** to interpret the image and integrate it into the case context.
+### 2. **Multimodal Analysis & Generation**
+- **Input**: Players upload photos of "evidence", analyzed by **Gemini 3 Vision**.
+- **Output**: The game generates **realistic crime scene images** using `gemini-3-image-latest`, adhering to the specific clues and location data of the generated case.
 
 ### 3. **Probabilistic Scoring**
 Instead of a simple "Correct/Incorrect", the engine calculates a confidence score for each suspect based on the player's hypothesis, modeling real detective intuition.
