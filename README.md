@@ -4,7 +4,7 @@
 
 Detective Academy transforms the standard "chat with AI" paradigm into a **reasoning-first detective game**. By leveraging **Gemini 3 Flash & Pro**, we generate infinite, logically consistent murder mysteries, analyze evidence multi-modally, and evaluate player deductions with probabilistic precision.
 
-*(Note to Judges: All core reasoning logic is handled dynamically by Gemini 3. Nothing is hardcoded.)*
+*(Note: All core reasoning logic is handled dynamically by Gemini 3. Nothing is hardcoded.)*
 
 ## 🏗️ Architecture
 
@@ -34,7 +34,7 @@ Instead of a simple "Correct/Incorrect", the engine calculates a confidence scor
 ### 4. **Guidance Mode (Metacognition)**
 If a player is stuck, they can ask for help. Gemini analyzes the *entire* case history and evidence to generate a subtle hint that nudges the player without spoiling the mystery.
 
-## 🛠️ How to Demo (Judge Instructions)
+## 🛠️ How to Demo
 
 1.  **Start a Case**: Click "Initialize New Case".
 2.  **Explore**: Read the scene and suspect profiles.
