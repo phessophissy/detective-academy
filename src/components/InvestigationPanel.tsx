@@ -160,17 +160,7 @@ export default function InvestigationPanel() {
                         </div>
                     )}
 
-                    {/* Dev Mode Toggle */}
-                    <div className={styles.devMode}>
-                        <button onClick={() => setShowDevMode(!showDevMode)} className={styles.devToggle}>
-                            ▶ View Gemini Structured Response (Dev Mode)
-                        </button>
-                        {showDevMode && (
-                            <pre className={styles.rawJson}>
-                                {JSON.stringify(lastResponse.rawResponse || lastResponse, null, 2)}
-                            </pre>
-                        )}
-                    </div>
+
                 </div>
             )}
 
