@@ -171,6 +171,20 @@ export default function InvestigationPanel() {
                     </button>
                 </div>
             )}
+
+            {/* Dev Mode Toggle - Always Visible */}
+            <div className={styles.devMode}>
+                <button onClick={() => setShowDevMode(!showDevMode)} className={styles.devToggle}>
+                    ▶ View Gemini Structured Response (Dev Mode)
+                </button>
+                {showDevMode && (
+                    <pre className={styles.rawJson}>
+                        {lastResponse
+                            ? JSON.stringify(lastResponse.rawResponse || lastResponse, null, 2)
+                            : "// No structured response data available yet.\n// Submit a hypothesis or ask for guidance to see Gemini 3's output trace."}
+                    </pre>
+                )}
+            </div>
         </div>
     );
 }
