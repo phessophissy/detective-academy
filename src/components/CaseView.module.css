@@ -78,6 +78,23 @@
     border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-secondary);
+    text-align: center;
+    padding: var(--space-4);
+    gap: var(--space-2);
+}
+
+.errorText {
+    color: var(--accent-danger, #ff6b6b);
+    font-size: 0.85rem;
+    margin-top: var(--space-2);
+}
+
 .sceneImage {
     object-fit: contain;
     max-width: 100%;

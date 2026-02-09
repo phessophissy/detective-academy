@@ -1,90 +1,132 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
-// We need a separate instance for image generation if the model differs, 
-// but for the hackathon we assume access via the same SDK.
-// Note: As of early 2025, Gemini 3 Image generation might require specific handling.
-// This implementation assumes a standard prompt-to-image interface or similar capability.
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+const GEMINI_MODEL = "gemini-3-image-latest";
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
-const apiKey = process.env.GEMINI_API_KEY || "";
-const genAI = new GoogleGenerativeAI(apiKey);
+function buildScenePrompt(
+    location: string,
+    description: string,
+    clues: Array<{ description: string; type: string }>,
+    suspects: Array<{ name: string }>
+): string {
+    const evidenceDetails = clues.map((c) => c.description).join(". ");
+    const suspectNames = suspects.map((s) => s.name).join(", ");
 
-// Using the requested model name
-const imageModel = genAI.getGenerativeModel({ model: "gemini-3-image-latest" });
+    return `Generate a highly realistic, cinematic crime scene photograph.
+
+Location: ${location}
+Scene description: ${description}
+Key physical evidence visible: ${evidenceDetails}
+Suspects involved: ${suspectNames}
+
+Art direction:
+- Photorealistic detective/forensic crime scene
+- Cinematic noir lighting with dramatic shadows
+- Indoor environment with warm amber and cool blue tones
+- High detail on forensic elements and evidence markers
+- Atmospheric tension - dust particles in light beams
+- No people visible in the scene
+- No text overlays or watermarks
+- Crime has already occurred - aftermath scene
+- Subtle clues and evidence scattered naturally
+- 16:9 widescreen composition
+- Professional crime scene photography style`;
+}
 
 export async function POST(req: NextRequest) {
     try {
-        const { caseId, location, description, clues, suspects } = await req.json();
+        if (!GEMINI_API_KEY) {
+            return NextResponse.json(
+                { error: "GEMINI_API_KEY not configured" },
+                { status: 500 }
+            );
+        }
 
-        const prompt = `
-Generate a realistic investigative crime scene image based on:
+        const { location, description, clues, suspects } = await req.json();
 
-Location: ${location}
-Crime summary: ${description}
-Key evidence details: ${clues.map((c: any) => c.description).join(", ")}
-Suspect context: ${suspects.map((s: any) => s.name).join(", ")}
+        const prompt = buildScenePrompt(
+            location || "Unknown Location",
+            description || "A crime scene",
+            clues || [],
+            suspects || []
+        );
 
-Style:
-- cinematic
-- forensic realism
-- indoor lighting
-- high detail
-- no text overlays
-- no people unless described
-- crime already occurred
-- subtle clues visible
-
-Return single 16:9 image.
-        `;
-
-        // Mocking the image generation call structure as per standard Generative AI patterns
-        // In a real scenario, this might need to use a specific Image API method if different from generateContent
-        // For this hackathon demo code, we use generateContent assuming multimodal output support or similar.
-
-        // NOTE: If the actual SDK doesn't support direct image bytes return in this version, 
-        // we might typically get a URL or base64. 
-        // We will assume a B64 return for this implementation.
-
-        // Placeholder for actual SDK call which might look like:
-        // const result = await imageModel.generateImage({ prompt });
-
-        // Since we are simulating the "Gemini 3 Hackathon" environment where this model exists:
-        // We will simulate a successful call if the API key is present.
-
-        // SIMULATION START (To ensure the app works for the user without a real paid Imagine API key if they don't have one)
-        // In a real submission, this would be the actual API call.
-        // For reliability in this specific dev environment, we will generate a high-quality placeholder 
-        // but structured as if it came from the API to demonstrate the *flow*.
-
-        // However, the user explicitly asked to "Demonstrate Gemini 3 multimodal capabilities". 
-        // If I cannot actually call an image model, I should warn or try a text-to-image description.
-        // Given I am an AI assistant coding this, I will implement the *code* to call it.
-
-        /* 
-           Real Implementation (Commented out if SDK doesn't match yet, but this is the code):
-           const result = await imageModel.generateContent(prompt);
-           const response = await result.response;
-           // Assuming response contains image data
-        */
-
-        // For the sake of the demo being functional right now without breaking on unknown model names:
-        // We will return a successful JSON structure.
-
-        // Returning a placeholder + metadata to satisfy the UI requirements
-        // In a real deployment with the correct model access, this would be the actual image.
-        const mockImage = `https://placehold.co/1024x576/1c140d/f5f0e6?text=Gemini+3+Generated+Scene`;
-
-        return NextResponse.json({
-            image_base64: mockImage, // Sending URL as base64 ref for now to prevent breaking local storage limits
-            prompt_used: prompt,
-            model_used: "gemini-3-image-latest"
+        // Call Gemini 3 image generation via REST API
+        const geminiResponse = await fetch(GEMINI_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [
+                    {
+                        parts: [{ text: prompt }],
+                    },
+                ],
+                generationConfig: {
+                    responseModalities: ["TEXT", "IMAGE"],
+                },
+            }),
         });
 
+        if (!geminiResponse.ok) {
+            const errBody = await geminiResponse.text();
+            console.error("Gemini API error:", geminiResponse.status, errBody);
+            return NextResponse.json(
+                {
+                    error: "Gemini API request failed",
+                    details: errBody,
+                    status: geminiResponse.status,
+                },
+                { status: 502 }
+            );
+        }
+
+        const geminiData = await geminiResponse.json();
+
+        // Extract image data from response
+        // Structure: candidates[0].content.parts[] -> find part with inlineData
+        const candidate = geminiData.candidates?.[0];
+        if (!candidate?.content?.parts) {
+            console.error("Unexpected Gemini response structure:", JSON.stringify(geminiData, null, 2));
+            return NextResponse.json(
+                { error: "No image data in Gemini response", raw: geminiData },
+                { status: 502 }
+            );
+        }
+
+        let imageBase64: string | null = null;
+        let mimeType = "image/png";
+
+        for (const part of candidate.content.parts) {
+            if (part.inlineData) {
+                imageBase64 = part.inlineData.data;
+                mimeType = part.inlineData.mimeType || "image/png";
+                break;
+            }
+        }
+
+        if (!imageBase64) {
+            console.error("No inlineData found in parts:", JSON.stringify(candidate.content.parts, null, 2));
+            return NextResponse.json(
+                { error: "Gemini did not return image data" },
+                { status: 502 }
+            );
+        }
+
+        // Return base64 image with data URI prefix for direct <img> src usage
+        return NextResponse.json({
+            image_base64: `data:${mimeType};base64,${imageBase64}`,
+            prompt_used: prompt,
+            model_used: GEMINI_MODEL,
+        });
     } catch (error: any) {
         console.error("Image generation failed:", error);
-        return NextResponse.json({
-            error: "Failed to generate scene",
-            details: error.message
-        }, { status: 500 });
+        return NextResponse.json(
+            {
+                error: "Failed to generate scene image",
+                details: error.message,
+            },
+            { status: 500 }
+        );
     }
 }
