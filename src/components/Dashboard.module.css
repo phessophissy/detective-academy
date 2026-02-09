@@ -7,6 +7,33 @@
     flex-direction: column;
 }
 
+.logoContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.logo {
+    filter: drop-shadow(0 0 20px rgba(201, 162, 39, 0.3));
+    transition: filter 0.3s ease;
+}
+
+.logo:hover {
+    filter: drop-shadow(0 0 30px rgba(201, 162, 39, 0.5));
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .header {
     display: flex;
     justify-content: space-between;

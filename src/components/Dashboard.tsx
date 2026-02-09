@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useGame } from "@/context/GameContext";
 import styles from "./Dashboard.module.css";
 
@@ -8,6 +9,16 @@ export default function Dashboard() {
 
     return (
         <div className={styles.dashboard}>
+            <div className={styles.logoContainer}>
+                <Image
+                    src="/logo.svg"
+                    alt="Detective Academy"
+                    width={350}
+                    height={105}
+                    priority
+                    className={styles.logo}
+                />
+            </div>
             <header className={styles.header}>
                 <div className={styles.badge}>
                     <span className={styles.badgeLabel}>Rank</span>
