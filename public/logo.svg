@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c9a227"/>
+      <stop offset="50%" style="stop-color:#ffd700"/>
+      <stop offset="100%" style="stop-color:#b8860b"/>
+    </linearGradient>
+    <linearGradient id="lensGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:0.3"/>
+      <stop offset="50%" style="stop-color:#fff8dc;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#ffd700;stop-opacity:0.2"/>
+    </linearGradient>
+    <linearGradient id="handleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b7355"/>
+      <stop offset="50%" style="stop-color:#5c4033"/>
+      <stop offset="100%" style="stop-color:#3d2817"/>
+    </linearGradient>
+    <linearGradient id="navyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="textGlow">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Icon Section -->
+  <g transform="translate(10, 10)">
+    <!-- Badge background -->
+    <path d="M50 0 L90 10 L95 60 L50 100 L5 60 L10 10 Z" fill="url(#navyGradient)" stroke="url(#goldGradient)" stroke-width="2"/>
+    
+    <!-- Magnifying glass -->
+    <circle cx="50" cy="40" r="22" fill="url(#lensGlow)" stroke="url(#goldGradient)" stroke-width="2.5" filter="url(#glow)"/>
+    
+    <!-- Lens reflection -->
+    <ellipse cx="42" cy="32" rx="6" ry="4" fill="rgba(255,255,255,0.35)" transform="rotate(-45 42 32)"/>
+    
+    <!-- Handle -->
+    <rect x="66" y="56" width="22" height="6" rx="2" fill="url(#handleGradient)" transform="rotate(45 66 56)"/>
+    
+    <!-- Handle connector ring -->
+    <circle cx="64" cy="54" r="4" fill="url(#goldGradient)"/>
+    
+    <!-- Star accents -->
+    <polygon points="50,5 51,8 54,8 52,10 53,13 50,11 47,13 48,10 46,8 49,8" fill="#ffd700" opacity="0.8"/>
+  </g>
+  
+  <!-- Text Section -->
+  <g transform="translate(120, 0)">
+    <!-- DETECTIVE text -->
+    <text x="0" y="52" font-family="Georgia, serif" font-size="38" font-weight="bold" fill="url(#goldGradient)" letter-spacing="4" filter="url(#textGlow)">DETECTIVE</text>
+    
+    <!-- ACADEMY text -->
+    <text x="0" y="90" font-family="Georgia, serif" font-size="32" font-weight="normal" fill="#e8e8e8" letter-spacing="8">ACADEMY</text>
+    
+    <!-- Decorative line -->
+    <line x1="0" y1="58" x2="255" y2="58" stroke="url(#goldGradient)" stroke-width="1" opacity="0.6"/>
+    
+    <!-- Fingerprint accent -->
+    <g transform="translate(245, 20)" opacity="0.15">
+      <circle cx="15" cy="15" r="3" fill="none" stroke="#ffd700" stroke-width="0.5"/>
+      <circle cx="15" cy="15" r="6" fill="none" stroke="#ffd700" stroke-width="0.5"/>
+      <circle cx="15" cy="15" r="9" fill="none" stroke="#ffd700" stroke-width="0.5"/>
+      <circle cx="15" cy="15" r="12" fill="none" stroke="#ffd700" stroke-width="0.5"/>
+    </g>
+  </g>
+</svg>

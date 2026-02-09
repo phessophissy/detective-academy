@@ -15,6 +15,12 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Detective Academy | Gemini 3",
   description: "An AI-powered immersive detective investigation simulator.",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/favicon.svg',
+  },
 };
 
 import { GameProvider } from "@/context/GameContext";
