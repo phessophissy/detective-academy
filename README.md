@@ -1,4 +1,4 @@
-## 🧠 Detective Academy: Powered by Gemini 3
+## Detective Academy: Powered by Gemini 3
 
 
 
@@ -6,7 +6,7 @@ Detective Academy transforms the standard "chat with AI" paradigm into a **reaso
 
 *(Note: All core reasoning logic is handled dynamically by Gemini 3. Nothing is hardcoded.)*
 
-## 🏗️ Architecture: A Robust Reasoning Orchestrator
+## Architecture: A Robust Reasoning Orchestrator
 
 **Detective Academy is not a prompt wrapper.** It is a stateful application that orchestrates multiple specialized Gemini 3 calls to build a cohesive gameplay experience.
 
@@ -29,7 +29,7 @@ Detective Academy transforms the standard "chat with AI" paradigm into a **reaso
              JSON Structured Output
 ```
 
-## 🚀 Key Gemini 3 Capabilities Used
+## Key Gemini 3 Capabilities Used
 
 ### 1. **Structured Reasoning (JSON Mode)**
 We force Gemini to output complex game states (crime scenes, clues, suspect profiles) as strict JSON. This allows the UI to render interactive elements like the **Suspect Probability Table** and **Evidence Boards** rather than just text blocks.
@@ -52,7 +52,7 @@ If a player is stuck, they can ask for help. Gemini analyzes the *entire* case h
 4.  **Deduce**: Submit a hypothesis. Watch the **Probability Table** update in real-time.
 5.  **Verify**: Toggle **Dev Mode** (▶ button) to see the raw Gemini JSON response.
 
-## 📦 Tech Stack
+## Tech Stack
 - **AI**: Google Gemini 3 (Flash Preview / Pro)
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
