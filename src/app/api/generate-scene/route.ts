@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-const GEMINI_MODEL = "gemini-3-image-latest";
+const GEMINI_MODEL = "gemini-3-pro-image-preview";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
 function buildScenePrompt(
@@ -52,32 +52,66 @@ export async function POST(req: NextRequest) {
             suspects || []
         );
 
+
         // Call Gemini 3 image generation via REST API
-        const geminiResponse = await fetch(GEMINI_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                contents: [
-                    {
-                        parts: [{ text: prompt }],
-                    },
-                ],
-                generationConfig: {
-                    responseModalities: ["TEXT", "IMAGE"],
-                },
-            }),
-        });
+        // Implement exponential backoff for 429 errors
+        let geminiResponse;
+        const maxRetries = 3;
+        const baseDelay = 1000;
+
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                geminiResponse = await fetch(GEMINI_ENDPOINT, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                parts: [{ text: prompt }],
+                            },
+                        ],
+                        generationConfig: {
+                            responseModalities: ["TEXT", "IMAGE"],
+                        },
+                    }),
+                });
+
+                if (geminiResponse.status === 429 && attempt < maxRetries) {
+                    console.warn(`Gemini API 429 (Rate Limit). Retrying in ${baseDelay * Math.pow(2, attempt)}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, baseDelay * Math.pow(2, attempt)));
+                    continue;
+                }
+
+                break; // If success or non-retryable error, exit loop
+            } catch (err: any) {
+                if (attempt === maxRetries) throw err;
+                console.warn(`Gemini API fetch error. Retrying... ${err.message}`);
+                await new Promise(resolve => setTimeout(resolve, baseDelay));
+            }
+        }
+
+        if (!geminiResponse) {
+            throw new Error("Failed to connect to Gemini API after retries");
+        }
 
         if (!geminiResponse.ok) {
             const errBody = await geminiResponse.text();
             console.error("Gemini API error:", geminiResponse.status, errBody);
+
+            // Parse error if possible to give better message
+            let errorMessage = `Gemini API error: ${geminiResponse.status}`;
+            try {
+                const errJson = JSON.parse(errBody);
+                errorMessage = errJson.error?.message || errorMessage;
+            } catch { }
+
             return NextResponse.json(
                 {
-                    error: "Gemini API request failed",
+                    error: errorMessage,
                     details: errBody,
                     status: geminiResponse.status,
                 },
-                { status: 502 }
+                { status: geminiResponse.status === 429 ? 429 : 502 }
             );
         }
 
