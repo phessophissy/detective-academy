@@ -1,0 +1,73 @@
+.footer {
+    text-align: center;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    border-top: 1px solid var(--fg-muted);
+    margin-top: auto;
+    color: var(--fg-muted);
+    font-size: clamp(0.72rem, 3vw, 0.82rem);
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.25));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.line {
+    margin: 0;
+    opacity: 0.95;
+}
+
+.lineSub {
+    margin: 0;
+    opacity: 0.75;
+}
+
+.hackathon {
+    color: var(--accent-gold);
+}
+
+.authorLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.55rem;
+    padding: 0.4rem 0.9rem;
+    color: var(--fg-secondary);
+    text-decoration: none;
+    border: 1px solid var(--fg-muted);
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+    font-size: clamp(0.78rem, 3vw, 0.88rem);
+    transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+        box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+    -webkit-tap-highlight-color: transparent;
+    min-height: var(--touch-min);
+}
+
+.authorLink:hover {
+    color: var(--accent-gold-bright);
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 18px var(--accent-gold-dim);
+    transform: translateY(-1px);
+}
+
+.authorLink:active {
+    transform: translateY(0);
+}
+
+.authorLink:focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 2px;
+}
+
+.authorName {
+    color: var(--accent-gold);
+    font-weight: 600;
+}
+
+.xIcon {
+    width: 0.95em;
+    height: 0.95em;
+    fill: currentColor;
+    flex: 0 0 auto;
+}
