@@ -1,8 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { PlayerState, Case, Hypothesis, EngineResponse } from '@/lib/types';
-// import { MockEngine } from '@/lib/mock-engine'; // Disabled for Real API
+import { PlayerState, PlayerRank, Case, Hypothesis, EngineResponse } from '@/lib/types';
+import { useToast } from '@/components/Toast';
 
 interface GameContextType {
     playerState: PlayerState;
@@ -12,7 +12,7 @@ interface GameContextType {
     submitHypothesis: (hypothesis: Hypothesis) => Promise<EngineResponse>;
     analyzeImage: (file: File) => Promise<{ description: string; hiddenClues: string[] }>;
     quitCase: () => void;
-    askForGuidance: () => Promise<{ hint: string; focusArea: string }>;
+    askForGuidance: () => Promise<{ hint: string; focusArea: string; modelName?: string }>;
 }
 
 const INITIAL_STATE: PlayerState = {
@@ -25,7 +25,14 @@ const INITIAL_STATE: PlayerState = {
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
+function rankForCases(completed: number): PlayerRank {
+    if (completed >= 12) return 'Senior Detective';
+    if (completed >= 5) return 'Investigator';
+    return 'Cadet';
+}
+
 export function GameProvider({ children }: { children: React.ReactNode }) {
+    const { push } = useToast();
     const [playerState, setPlayerState] = useState<PlayerState>(INITIAL_STATE);
     const [currentCase, setCurrentCase] = useState<Case | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -47,14 +54,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('detective-academy-state', JSON.stringify(playerState));
     }, [playerState]);
 
-    /* 
-    Updated to use Real Gemini API Routes 
-  */
-
     const startNewCase = async () => {
         setIsLoading(true);
         try {
-            // Call the live API route
             const res = await fetch('/api/generate-case', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -67,16 +69,19 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             }
 
             const newCase: Case = await res.json();
-
             setCurrentCase(newCase);
             setPlayerState(prev => ({ ...prev, currentCaseId: newCase.id }));
         } catch (error: any) {
             console.error("Failed to generate case", error);
             const msg = error.message || "Failed to contact Gemini API";
             if (msg.includes("429") || msg.includes("Too Many Requests")) {
-                alert("⚠️ The AI Detective is busy (Rate Limit Reached). Please wait 30 seconds and try again.");
+                push({
+                    type: "error",
+                    title: "Rate limit reached",
+                    message: "The AI Detective is busy. Please wait ~30 seconds and try again."
+                });
             } else {
-                alert(`Error: ${msg}`);
+                push({ type: "error", title: "Case generation failed", message: msg, duration: 6000 });
             }
         } finally {
             setIsLoading(false);
@@ -104,17 +109,20 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
             const response: EngineResponse = await res.json();
 
-            // Update player state based on result
             if (response.isCorrect) {
-                setPlayerState(prev => ({
-                    ...prev,
-                    completedCases: prev.completedCases + 1,
-                    currentCaseId: null, // Case closed
-                    history: [...prev.history, { caseId: currentCase.id, score: response.score, date: new Date().toISOString() }]
-                }));
-                setCurrentCase(null); // Return to lobby
+                setPlayerState(prev => {
+                    const completed = prev.completedCases + 1;
+                    return {
+                        ...prev,
+                        completedCases: completed,
+                        rank: rankForCases(completed),
+                        currentCaseId: null, // case is closed in state...
+                        history: [...prev.history, { caseId: currentCase.id, score: response.score, date: new Date().toISOString() }]
+                    };
+                });
+                // ...but keep currentCase mounted so the player can see their victory
+                // feedback & celebration. They return to HQ explicitly via quitCase().
             } else {
-                // Penalty for incorrect guess
                 setPlayerState(prev => ({
                     ...prev,
                     accuracyScore: Math.max(0, prev.accuracyScore - 5)
@@ -124,6 +132,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             return response;
         } catch (error) {
             console.error("Evaluation error", error);
+            push({
+                type: "error",
+                title: "Evaluation failed",
+                message: "The Academy Engine could not grade your hypothesis. Try again."
+            });
             throw error;
         } finally {
             setIsLoading(false);
@@ -133,22 +146,19 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     const analyzeImage = async (file: File) => {
         setIsLoading(true);
         try {
-            // Convert file to Base64
             const reader = new FileReader();
             return new Promise<{ description: string; hiddenClues: string[] }>((resolve, reject) => {
                 reader.onload = async () => {
                     try {
                         const base64String = reader.result as string;
-
                         const res = await fetch('/api/analyze-evidence', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 imageBase64: base64String,
-                                caseContext: currentCase ? currentCase.description : ""
+                                caseContext: currentCase ? `${currentCase.title}: ${currentCase.description}` : ""
                             })
                         });
-
                         if (!res.ok) throw new Error("Analysis failed");
                         const data = await res.json();
                         resolve(data);
@@ -171,12 +181,19 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         if (!currentCase) throw new Error("No active case");
         setIsLoading(true);
         try {
+            // Send a richer, spoiler-free context so hints are actually useful.
+            const guidanceContext = {
+                title: currentCase.title,
+                description: currentCase.description,
+                clues: currentCase.scenes.flatMap(s => s.clues.map(c => ({ description: c.description, type: c.type }))),
+                suspects: currentCase.suspects.map(s => ({ name: s.name, profile: s.profile, alibi: s.alibi }))
+            };
             const res = await fetch('/api/get-guidance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    caseContext: currentCase.description,
-                    currentEvidence: playerState.history // overly simple, but functional for hackathon context
+                    caseContext: JSON.stringify(guidanceContext),
+                    currentEvidence: []
                 })
             });
 

@@ -1,0 +1,83 @@
+.toaster {
+    position: fixed;
+    left: 50%;
+    bottom: var(--space-5);
+    transform: translateX(-50%);
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--space-2);
+    width: min(92vw, 440px);
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--bg-panel);
+    border: 1px solid var(--fg-muted);
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    animation: toastIn var(--dur) var(--ease) both;
+    backdrop-filter: blur(8px);
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.icon { font-size: 1.1rem; line-height: 1.4; flex: 0 0 auto; }
+
+.body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.title { font-size: 0.85rem; font-family: var(--font-display); }
+
+.message {
+    font-size: 0.85rem;
+    color: var(--fg-secondary);
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+}
+
+.closeBtn {
+    flex: 0 0 auto;
+    background: none;
+    border: none;
+    color: var(--fg-muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0 var(--space-1);
+    min-height: var(--touch-min);
+    min-width: var(--touch-min);
+    border-radius: var(--radius-sm);
+}
+.closeBtn:hover { color: var(--fg-primary); background: rgba(255,255,255,0.06); }
+
+.success { border-left: 4px solid var(--accent-success); }
+.error   { border-left: 4px solid var(--accent-danger); }
+.hint    { border-left: 4px solid var(--accent-gold); }
+.info    { border-left: 4px solid var(--accent-blue); }
+
+.success .icon { color: var(--accent-success); }
+.error .icon   { color: var(--accent-danger); }
+.hint .icon    { color: var(--accent-gold); }
+.info .icon    { color: var(--accent-blue); }
+
+@media (max-width: 640px) {
+    .toaster {
+        bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+        width: calc(100vw - var(--space-6));
+    }
+}

@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
+import { GameProvider } from "@/context/GameContext";
+import { ToastProvider } from "@/components/Toast";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -15,6 +18,12 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Detective Academy | Gemini 3",
   description: "An AI-powered immersive detective investigation simulator.",
+  applicationName: "Detective Academy",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Detective Academy",
+  },
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
@@ -23,8 +32,13 @@ export const metadata: Metadata = {
   },
 };
 
-import { GameProvider } from "@/context/GameContext";
-import Footer from "@/components/Footer";
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#1c140d",
+};
 
 export default function RootLayout({
   children,
@@ -34,12 +48,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${outfit.variable}`}>
-        <GameProvider>
-          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-            {children}
-            <Footer />
-          </div>
-        </GameProvider>
+        <ToastProvider>
+          <GameProvider>
+            <div className="appShell">
+              {children}
+              <Footer />
+            </div>
+          </GameProvider>
+        </ToastProvider>
       </body>
     </html>
   );

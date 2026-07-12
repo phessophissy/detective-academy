@@ -8,7 +8,13 @@ export default function Home() {
   const { currentCase, isLoading } = useGame();
 
   if (isLoading && !currentCase) {
-    return <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>Loading Academy Interface...</div>;
+    return (
+      <div className="bootScreen">
+        <div className="bootLogo">🕵️</div>
+        <div className="bootSpinner" />
+        <p className="bootText">Booting Academy Interface…</p>
+      </div>
+    );
   }
 
   if (!currentCase) {

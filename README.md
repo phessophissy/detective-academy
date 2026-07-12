@@ -54,10 +54,28 @@ If a player is stuck, they can ask for help. Gemini analyzes the *entire* case h
 
 ## Tech Stack
 - **AI**: Google Gemini 3 (Flash Preview / Pro)
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: CSS Modules (Custom "Detective" Theme)
 - **Deployment**: Vercel
+
+## 📱 Mobile & UX Overhaul
+
+The interface was rebuilt to be fully mobile-friendly and feel more like a game:
+
+- **Responsive everywhere**: fluid `clamp()` typography, a viewport meta with safe-area insets, and 44px+ touch targets.
+- **Mobile case tabs**: on phones the multi-panel case screen collapses into a sticky bottom tab bar — **Scene · Evidence · Suspects · Investigate** — so nothing is cramped.
+- **Case clock**: a live timer in the case header adds tension and tracks time-on-case.
+- **Investigation Notebook**: a slide-in drawer (saved per-case to `localStorage`) for clues, timelines and theories.
+- **Suspect flagging**: tap any suspect to mark them as a person of interest.
+- **Quick-add suspect chips**: insert a suspect's name straight into your hypothesis.
+- **Deduction attempts counter** and live hypothesis length.
+- **Toast notifications** replace every jarring `alert()` (errors, forensic scans, mentor hints, case-closed).
+- **Animated probability bars**, a confetti success celebration, and a fixed UX bug where a correct deduction used to boot you out before you could read your feedback — you now stay on the case until you choose to return to HQ.
+- **Rank progression bar** and an expandable "How to play" guide on the dashboard.
+- **Animated noir background**, loading skeleton, and reduced-motion support.
+
+> Getting started locally: copy `.env.example` to `.env.local` and add your `GEMINI_API_KEY`, then `npm install && npm run dev`.
 
 ---
 *Built by Phessophissy for the Gemini 3 Hackathon*
