@@ -3,10 +3,6 @@ import styles from "./Footer.module.css";
 export default function Footer() {
     return (
         <footer className={styles.footer}>
-            <p className={styles.line}>
-                Built for{' '}
-                <strong className={styles.hackathon}>Gemini 3 Hackathon</strong> 🧠
-            </p>
             <p className={styles.lineSub}>
                 Powered by Google Gemini 3 · An AI detective simulator
             </p>
